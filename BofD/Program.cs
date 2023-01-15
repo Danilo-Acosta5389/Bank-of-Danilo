@@ -69,7 +69,7 @@ namespace BofD
             void welcomeSign()
             {
                 Console.Clear();
-                Console.WriteLine("Bank of Danilo LTD banking aplication version 5.0.0.9, all rights reserved.");
+                Console.WriteLine("Bank of Danilo LTD banking application version 5.0.0.9, all rights reserved.");
                 Console.WriteLine("\n::::::::::::::::::::::::::::::::::::::::::::::::::: Välkommen till :::::::::::::::::::::::::::::::::::::::::::::::::::::");
                 Console.WriteLine("\r\n /$$$$$$$                      /$$                        /$$$$$$        /$$$$$$$                      /$$ /$$          \r\n| $$__  $$                    | $$                       /$$__  $$      | $$__  $$                    |__/| $$          \r\n| $$  \\ $$  /$$$$$$  /$$$$$$$ | $$   /$$        /$$$$$$ | $$  \\__/      | $$  \\ $$  /$$$$$$  /$$$$$$$  /$$| $$  /$$$$$$ \r\n| $$$$$$$  |____  $$| $$__  $$| $$  /$$/       /$$__  $$| $$$$          | $$  | $$ |____  $$| $$__  $$| $$| $$ /$$__  $$\r\n| $$__  $$  /$$$$$$$| $$  \\ $$| $$$$$$/       | $$  \\ $$| $$_/          | $$  | $$  /$$$$$$$| $$  \\ $$| $$| $$| $$  \\ $$\r\n| $$  \\ $$ /$$__  $$| $$  | $$| $$_  $$       | $$  | $$| $$            | $$  | $$ /$$__  $$| $$  | $$| $$| $$| $$  | $$\r\n| $$$$$$$/|  $$$$$$$| $$  | $$| $$ \\  $$      |  $$$$$$/| $$            | $$$$$$$/|  $$$$$$$| $$  | $$| $$| $$|  $$$$$$/\r\n|_______/  \\_______/|__/  |__/|__/  \\__/       \\______/ |__/            |_______/  \\_______/|__/  |__/|__/|__/ \\______/ \r\n                                                                                                                        \r                                                                                                                        \r                                                                                                                        \r");
                 Console.WriteLine("::::::::::::::::::::::::::::::::::::::::: Vi älskar dina pengar mer än dig :::::::::::::::::::::::::::::::::::::::::::::");
@@ -156,7 +156,7 @@ namespace BofD
         static void mainMenu(string userName, int pinCode, string[] accountNames, double[] accountBalances)
         {
             Console.Clear();
-            Console.WriteLine("Bank of Danilo LTD banking aplication version 5.0.0.9, all rights reserved.\n\n");
+            Console.WriteLine("Bank of Danilo LTD banking application version 5.0.0.9, all rights reserved.\n\n");
             Console.WriteLine("Inloggning lyckades!");
             Console.WriteLine($"\nVälkommen tillbaka {userName}!");
             
