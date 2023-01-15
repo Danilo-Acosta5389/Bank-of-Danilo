@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using System.Globalization;
+using System.Security; //System.Security finns för att kunna anropa SecureString classen
 
 namespace BofD
 {
@@ -6,14 +7,16 @@ namespace BofD
     {
         static void Main(string[] args)
         {
+            //Arryer som agerar databas
+            //Jagged arrays har konton och saldon: totalt finns det 5 konton.
             string[] userNames = new string[5];
             int[] userPINs = new int[5];
             string[][] userAccounts = new string[5][];
             double[][] userBalances = new double[5][];
 
 
-            userNames[0] = "D";
-            userPINs[0] = 1;
+            userNames[0] = "Danilo";
+            userPINs[0] = 1111;
             userAccounts[0] = new string[] { "Personkonto", "Kapitalkonto", "Aktie- och fondkonto" };
             userBalances[0] = new double[] { 1500, 25000, 75000  };
             
@@ -41,19 +44,38 @@ namespace BofD
             userAccounts[4] = new string[] { "Personkonto", "Sparkonto", "Bobby"};
             userBalances[4] = new double[] { 32600, 250000, 1000000};
 
+            //Datum och tid finns av kosmetiska skäl
+            string[] months = {"Januari", "Februari", "Mars", "April", "Maj",
+            "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"};
 
-            bool logOut = false;
+            //Antal försök är satt till 3, förändras längre ned
             int loginRetries = 3;
+            bool logOut = true; 
+            //LogOut boolen finns för att bestämma om en person -
+            //har anget fel pinkod vid inlogging eller om det var en utloggning
+
             bool mainLoop = true;
             while (mainLoop)
             {
-
+                //Jag ville ha möjligheten att skicka fram skylten Bank of Danilo, på olika ställen.
+                
+                welcomeSign();
+                loginSection(); 
+                
+                //Inloggningsfunktion tror inte att denna behövs egentligen,
+                //men tyckte att det såg mer ordnat ut så
+            }
+            
+            void welcomeSign()
+            {
                 Console.Clear();
+                Console.WriteLine("Bank of Danilo LTD banking aplication version 5.0.0.9, all rights reserved.");
                 Console.WriteLine("\n::::::::::::::::::::::::::::::::::::::::::::::::::: Välkommen till :::::::::::::::::::::::::::::::::::::::::::::::::::::");
                 Console.WriteLine("\r\n /$$$$$$$                      /$$                        /$$$$$$        /$$$$$$$                      /$$ /$$          \r\n| $$__  $$                    | $$                       /$$__  $$      | $$__  $$                    |__/| $$          \r\n| $$  \\ $$  /$$$$$$  /$$$$$$$ | $$   /$$        /$$$$$$ | $$  \\__/      | $$  \\ $$  /$$$$$$  /$$$$$$$  /$$| $$  /$$$$$$ \r\n| $$$$$$$  |____  $$| $$__  $$| $$  /$$/       /$$__  $$| $$$$          | $$  | $$ |____  $$| $$__  $$| $$| $$ /$$__  $$\r\n| $$__  $$  /$$$$$$$| $$  \\ $$| $$$$$$/       | $$  \\ $$| $$_/          | $$  | $$  /$$$$$$$| $$  \\ $$| $$| $$| $$  \\ $$\r\n| $$  \\ $$ /$$__  $$| $$  | $$| $$_  $$       | $$  | $$| $$            | $$  | $$ /$$__  $$| $$  | $$| $$| $$| $$  | $$\r\n| $$$$$$$/|  $$$$$$$| $$  | $$| $$ \\  $$      |  $$$$$$/| $$            | $$$$$$$/|  $$$$$$$| $$  | $$| $$| $$|  $$$$$$/\r\n|_______/  \\_______/|__/  |__/|__/  \\__/       \\______/ |__/            |_______/  \\_______/|__/  |__/|__/|__/ \\______/ \r\n                                                                                                                        \r                                                                                                                        \r                                                                                                                        \r");
                 Console.WriteLine("::::::::::::::::::::::::::::::::::::::::: Vi älskar dina pengar mer än dig :::::::::::::::::::::::::::::::::::::::::::::");
                 Console.WriteLine();
-                loginSection();
+                DateTime now = DateTime.Now;
+                Console.WriteLine($"Den {now.Day} {months[now.Month - 1]} {now.Year} {now:HH:mm:ss}");
             }
 
             void loginSection()
@@ -61,12 +83,36 @@ namespace BofD
                 bool loginActive = true;
                 while (loginActive)
                 {
+                    welcomeSign();
+                    if (logOut != true)
+                    {
+                        loginRetries--;
+                        Console.WriteLine("Inloggning misslyckades, var god försök igen.");
+                        Console.WriteLine($"Du har {loginRetries} försök kvar");
+                        //Thread.Sleep(2000);
+
+
+                        if (loginRetries == 0)
+                        {
+                            Console.WriteLine("Antal försök tog slut, systemet stängs ned.");
+                            Thread.Sleep(1000);
+                            Console.WriteLine("Tack för att du använder Bank of Danilo, vi ser fram emot ditt nästa besök hos oss :).");
+                            Thread.Sleep(2000);
+                            Environment.Exit(0);
+                        }
+                    }
+                    //Inloggningsförsöks systemet finns här
+                    //Systemet ska kunna veta om man har anget rätt siffror vid pinkod
+                    //eller om det var en sträng - i så fall räknas det inte som fel pin, man får försöka igen.
+
                     logOut = false;
 
                     Console.Write("\nVar god och ange användarnamn: ");
                     string inputName = Console.ReadLine();
                     Console.Write("Var god och ange PIN-kod: ");
 
+                    //Koden nedan är för att dölja pinkoden,
+                    //int konverteras till char ersätts med en asterisk *
                     SecureString pin = hidePin();
                     string pinCode = new System.Net.NetworkCredential(String.Empty, pin).Password;
                     Console.WriteLine();
@@ -75,63 +121,45 @@ namespace BofD
                     bool success = int.TryParse(pinCode, out inputPIN);
                     if (success)
                     {
-
-                        // todo: loopa igenom alla userName och userPassword
-                        // om du hittar en matchning, = sucess. anropa en funktion som heter mainMenu(userName, pinCode, string[] accountNames, double[] accountBalances)
-
                         try
-                        {
+                        {   //Här testast det inmatade användarnamnet och pinkod mot våran "databas"
                             for (int i = 0; i < userNames.Length; i++)
                             {
                                 if (inputName.ToLower() == userNames[i].ToLower() && inputPIN == userPINs[i])
                                 {
-                                    Console.WriteLine("\nLyckad inloggning!");
-                                    //Thread.Sleep(1000);
-                                    Console.WriteLine();
+                                    //När det finns en matchning skickas allt som finns på rätt index in i denna funktion
                                     mainMenu(userNames[i], userPINs[i], userAccounts[i], userBalances[i]);
-
+                                    logOut = true;
+                                    loginRetries = 3; 
+                                    //Här vet systemet att det är en giltig inloggning
+                                    //och antal försök ställs om till 3
                                 }
-
-                                //Console.WriteLine(i);
                             }
                         }
                         catch (Exception)
                         {
                             Console.WriteLine("Ojsan! Ett fel inträffade, var god försök igen.");
                         }
-
-
                         
-                        if (logOut == true)
-                        {
-                            loginRetries--;
-                            Console.WriteLine("Inloggning misslyckades, var god försök igen.");
-                            Console.WriteLine("Du har {0} försök kvar", loginRetries);
-                            //Thread.Sleep(2000);
-
-
-                            if (loginRetries == 0)
-                            {
-                                Console.WriteLine("Antal försök tog slut, systemet stängs ned.");
-                                Thread.Sleep(1000);
-                                Console.WriteLine("Tack för att du använder Bank of Danilo, vi ser fram emot ditt nästa besök hos oss :).");
-                                Thread.Sleep(2000);
-                                Environment.Exit(0);
-                            }
-                        }
                     }
                     else
                     {
-                        Console.WriteLine("\nVar god och ange heltal endast!\n");
+                        Console.WriteLine("\nOgiltigt val. Var god och ange heltal endast!\n");
+                        logOut = true;
                     }
                 }
             }
         }
 
+        //Menyfunktionen som tar in indexerad användarnamn, pinkod, rätt array av konton och saldon
+
         static void mainMenu(string userName, int pinCode, string[] accountNames, double[] accountBalances)
         {
-            Console.WriteLine($"Välkommen tillbaka {userName}!");
-
+            Console.Clear();
+            Console.WriteLine("Bank of Danilo LTD banking aplication version 5.0.0.9, all rights reserved.\n\n");
+            Console.WriteLine("Inloggning lyckades!");
+            Console.WriteLine($"\nVälkommen tillbaka {userName}!");
+            
             bool optionsRunning = true;
             while (optionsRunning)
             {
@@ -149,70 +177,67 @@ namespace BofD
                     Console.WriteLine(numKey);
                     switch (numKey)
                     {
-                        case 1:
+                        
+                        case 1: //För att se konton och saldon itereras de jagged arrays som togs in
                             Console.WriteLine("\nKonton och saldon\n");
                             for (int i = 0; i < accountNames.Length; i++)
                             {
-                                Console.WriteLine($"{accountNames[i]}: {accountBalances[i]} kr");
+                                Console.WriteLine($"{accountNames[i]}: {Math.Round(accountBalances[i], 2)} kr");
                             }
-                            Console.WriteLine("\nTryck någonstans för att gå tillbaka");
+                            Console.WriteLine("\nTryck enter för att komma till huvudmenyn");
                             Console.ReadKey();
                             break;
-                        case 2:
+                        case 2://Här kallas en funktion för överföring mellan konton, de jagged arrays som redan har tagits in, tas in igen.
                             Console.WriteLine("\nÖverföring mellan konton\n");
                             transferMoney(accountNames, accountBalances);
                             break;
-                        case 3:
+                        case 3: //Funktion för att ta ut pengar, ganska likt överföring mellan konton
                             Console.WriteLine("\nTa ut pengar\n");
                             withdrawMoney(pinCode, accountNames, accountBalances);
                             //Thread.Sleep(2000);
                             break;
-                        case 4:
+                        case 4: //Logga ut stoppar helt enkelt while loopen för att menyn ska loopa klart.
                             Console.WriteLine("\nLogga ut");
-                            
                             //Thread.Sleep(1000);
                             Console.WriteLine("Tack för att du använder Bank of Danilo!");
                             //Thread.Sleep(1000);
                             Console.WriteLine("Vi ser fram emot ditt nästa besök hos oss :)");
                             //Thread.Sleep(2000);
-                            //logOut = true;
-                            //loginRetries = 3;
                             optionsRunning = false;
                             break;
                         default:
+                            Console.WriteLine("\nOgiltigt val. Var god och ange siffran 1, 2, 3 eller 4.\n");
                             break;
                     }
                 }
-                else
+                else //Felhantering finns i olika former, TryParse och TryCatche eller i switchsatsen
                 {
-                    Console.WriteLine("\nVar god och ange siffrorna 1, 2, 3 eller 4.\n");
+                    Console.WriteLine("\nOgiltigt val. Var god och ange siffran 1, 2, 3 eller 4.\n");
                 }
             }
-
-
-            // menu
-            // withDraw (testa detta först, kolla att överföringen syns i lista konton, kolla att den överlever en logout
-
-            // om det inte funkar:
-            // skapa en ny variabel tempAccountBalances = accountBalances
-            // tempAccountBalances = withDraw(...,tempACcountBalances)
         }
 
-        
+        //Nedan kommer överföring mellan konton
+
         static void transferMoney(string[] accounts, double[] balances)
         {
             bool transferMenu = true;
             while (transferMenu)
             {
                 try
-                {
+                {   //Itererar mellan inhämtade konton och saldon
                     for (int i = 0; i < accounts.Length; i++)
-                    {
-                        Console.WriteLine($"{i + 1}. {accounts[i]}: {balances[i]} kr");
+                    {   
+                        //Math.Round(double,int) används för att visa max två decimaler
+                        //dessa decimaler representar ören.
+
+                        Console.WriteLine($"{i + 1}. {accounts[i]}: {Math.Round(balances[i], 2)} kr");
                     }
+
+                    //Instruktioner för användaren
                     
                     Console.WriteLine("\nOBS! Välj ett konto genom att mata in siffran till vänster om kontonamnet.");
-                    Console.WriteLine("     Lämna blankt för att gå tillbaka.\n");
+                    Console.WriteLine("-- Eller lämna blankt och tryck enter för att avbryta.\n");
                     Console.Write("Skicka från: ");
                     string fromAccount = Console.ReadLine();
                     int from = int.Parse(fromAccount);
@@ -244,7 +269,7 @@ namespace BofD
                         {
                             Console.WriteLine();
                             Console.WriteLine("Ojsan! Det gick inte att överföra.");
-                            Console.WriteLine("Beloppet var för lågt!");
+                            Console.WriteLine("Beloppet var för lågt.");
                             Console.WriteLine();
                         }
                         else
@@ -252,121 +277,182 @@ namespace BofD
                             Console.WriteLine();
                             balances[from - 1] = balances[from - 1] - transferAmount;
                             balances[to - 1] = balances[to - 1] + transferAmount;
-                            Console.WriteLine("Yippi! Överföring lyckades!");
+                            Console.WriteLine("Överföring lyckades!");
+                            Console.WriteLine($"\nÖverföring på {Math.Round(transferAmount, 2)} kr från {accounts[from - 1]} till {accounts[to - 1]}");
+                            Console.WriteLine($"Det finns nu totalt: {Math.Round(balances[to - 1], 2)} kr på {accounts[to - 1]}");
+                            Console.WriteLine($"och totalt: {Math.Round(balances[from - 1], 2)} kr på {accounts[from - 1]}.");
                             Console.WriteLine();
-                            
+                            Console.WriteLine("Tryck enter för att komma till huvudmenyn");
+                            Console.ReadKey();
+                            transferMenu = false;
                         }
                     }
                     else if (yesNo.ToLower() == "n")
                     {
-                        break;
+                        Console.WriteLine();
+                        continue;
                     }
                     else
                     {
+                        
                         Console.WriteLine("Var god och mata in \"J\" eller \"N\"" );
+                        Console.WriteLine();
+                        continue;
                     }
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Ojsan! Mata in rätt värde.");
+                    Console.WriteLine("Ogiltigt val.");
+                    Console.Write("Tillbaka till huvudmenyn? J/N: ");
+                    string yesNo = Console.ReadLine();
+                    if (yesNo.ToLower() == "j")
+                    {
+                        transferMenu = false;
+                    }
+                    else if (yesNo.ToLower() == "n")
+                    {
+                        Console.WriteLine();
+                        continue;
+                    }
+                    
                 }
-
-                Console.WriteLine("Tryck någonstans för att gå tillbaka");
-                Console.ReadKey();
-                transferMenu = false;
             }
         }
 
+        //Funktion för att ta ut pengar nedan
+        //Tar in pinkoden från inloggningen, konton och saldon
         static void withdrawMoney(int pinCode, string[] accounts, double[] balances)
         {
-            try
+            bool withDrawRunning = true;
+            while(withDrawRunning)
             {
-                for (int i = 0; i < accounts.Length; i++)
+                try
                 {
-                    Console.WriteLine($"{i + 1}. {accounts[i]}: {balances[i]} kr");
-                }
-                Console.WriteLine("\nOBS! Välj ett konto genom att mata in siffran till vänster om kontonamnet.");
-                Console.WriteLine("     Lämna blankt för att gå tillbaka.\n");
-                Console.Write("Ta ut från: ");
-                string chooseAccount = Console.ReadLine();
-                int chosenAccount = int.Parse(chooseAccount);
-
-                Console.WriteLine($"Ta ut från {accounts[chosenAccount - 1]}.");
-                Console.WriteLine("Är detta korrekt?");
-                Console.Write("Mata in \"J\" eller \"N\": ");
-                string yesNo = Console.ReadLine();
-
-                if (yesNo.ToLower() == "j")
-                {
-
-                    Console.WriteLine("OBS! Ange PIN-kod för att fortsätta uttag");
-                    Console.Write("--> ");
-                    SecureString pin = hidePin();
-                    string pinCheck = new System.Net.NetworkCredential(String.Empty, pin).Password;
-                    Console.WriteLine();
-                    int inputPIN = 0;
-                    bool success = int.TryParse(pinCheck, out inputPIN);
-                    if (success)
+                    for (int i = 0; i < accounts.Length; i++)
                     {
-                        if(inputPIN == pinCode)
-                        {
-                            Console.Write($"Ange belopp: ");
-                            double withdrawAmount = double.Parse(Console.ReadLine());
-                            if (withdrawAmount > balances[chosenAccount - 1])
-                            {
-                                Console.WriteLine();
-                                Console.WriteLine("Ojsan! Det gick inte att överföra.");
-                                Console.WriteLine("Täckning saknas på kontot.");
-                                Console.WriteLine();
-                            }
-                            else if (withdrawAmount < 0)
-                            {
-                                Console.WriteLine();
-                                Console.WriteLine("Ojsan! Det gick inte att överföra.");
-                                Console.WriteLine("Beloppet var för lågt!");
-                                Console.WriteLine();
-                            }
-                            else
-                            {
-                                Console.WriteLine();
-                                balances[chosenAccount - 1] = balances[chosenAccount - 1] - withdrawAmount;
-                                Console.WriteLine("Uttag lyckades!");
-                                Console.WriteLine($"\nTog ut {withdrawAmount} kr från {accounts[chosenAccount - 1]}.");
-                                Console.WriteLine($"Det finns {balances[chosenAccount - 1]} kr kvar på kontot");
-                                Console.WriteLine();
-                                Console.WriteLine("Tryck enter för att komma till huvudmenyn");
-                                Console.ReadKey();
+                        Console.WriteLine($"{i + 1}. {accounts[i]}: {balances[i]} kr");
+                    }
+                    Console.WriteLine("\nOBS! Välj ett konto genom att mata in siffran till vänster om kontonamnet.");
+                    Console.WriteLine("-- Eller lämna blankt och tryck enter för att avbryta.\n"); 
 
+                    //Lite workaround för den som vill kunna avbryta mitt i
+
+                    Console.Write("Ta ut från: ");
+                    string chooseAccount = Console.ReadLine();
+                    int chosenAccount = int.Parse(chooseAccount);
+                    
+                    Console.WriteLine($"Ta ut från {accounts[chosenAccount - 1]}.");
+                    Console.WriteLine("Är detta korrekt?");
+                    Console.Write("Mata in \"J\" eller \"N\": ");
+                    string yesNo = Console.ReadLine();
+
+                    if (yesNo.ToLower() == "j")
+                    {
+                        //Användare måste ange PIN för att göra uttag, annars går det inte
+                        //PINkoden använder samma metod som vid inloggingen.
+
+                        Console.WriteLine("OBS! Ange PIN-kod för att fortsätta uttag");
+                        Console.Write("--> ");
+                        SecureString pin = hidePin();
+                        string pinCheck = new System.Net.NetworkCredential(String.Empty, pin).Password;
+                        Console.WriteLine();
+                        int inputPIN = 0;
+                        bool success = int.TryParse(pinCheck, out inputPIN);
+                        if (success)
+                        {
+                            if (inputPIN == pinCode)
+                            {
+                                Console.Write($"Ange belopp: ");
+                                double withdrawAmount = double.Parse(Console.ReadLine());
+                                if (withdrawAmount > balances[chosenAccount - 1])
+                                {
+                                    Console.WriteLine();
+                                    Console.WriteLine("Ojsan! Det gick inte att överföra.");
+                                    Console.WriteLine("Täckning saknas på kontot.");
+                                    Console.WriteLine();
+                                }
+                                else if (withdrawAmount < 0)
+                                {
+                                    Console.WriteLine();
+                                    Console.WriteLine("Ojsan! Det gick inte att överföra.");
+                                    Console.WriteLine("Beloppet var för lågt!");
+                                    Console.WriteLine();
+                                }
+                                else
+                                {
+                                    Console.WriteLine();
+                                    balances[chosenAccount - 1] = balances[chosenAccount - 1] - withdrawAmount;
+                                    Console.WriteLine("Uttag lyckades!");
+                                    Console.WriteLine($"\nTog ut {Math.Round(withdrawAmount, 2)} kr från {accounts[chosenAccount - 1]}.");
+                                    Console.WriteLine($"Det finns {Math.Round(balances[chosenAccount - 1], 2)} kr kvar på kontot");
+                                    Console.WriteLine();
+                                    Console.WriteLine("Tryck enter för att komma till huvudmenyn");
+                                    Console.ReadKey();
+                                    withDrawRunning = false;
+                                }
                             }
+                            else if (inputPIN != pinCode) { Console.WriteLine(); Console.WriteLine("Ogiltig PIN"); }
+
                         }
-                        else if(inputPIN != pinCode)
+                        else 
                         { 
-                            Console.WriteLine(); Console.WriteLine("Fel PIN."); 
+                            Console.WriteLine("Ett fel inträffade, var god försök igen.");
+                            Console.WriteLine();
+                        }
+
+                    }
+                    else if (yesNo.ToLower() == "n")
+                    {
+                        Console.Write("Tillbaka till huvudmenyn? J/N: ");
+                        yesNo = Console.ReadLine();
+                        if (yesNo.ToLower() == "j")
+                        {
+                            withDrawRunning = false;
+                        }
+                        else if (yesNo.ToLower() == "n")
+                        {
+                            Console.WriteLine();
+                            continue;
+                        }
+                    }
+                    else 
+                    {
+                        Console.Write("Tillbaka till huvudmenyn? J/N: ");
+                        yesNo = Console.ReadLine();
+                        if (yesNo.ToLower() == "j")
+                        {
+                            withDrawRunning = false;
+                        }
+                        else if(yesNo.ToLower() == "n")
+                        {
+                            Console.WriteLine();
+                            continue;
                         }
                         
                     }
-                    else
+
+
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Ogiltigt val.");
+                    Console.Write("Tillbaka till huvudmenyn? J/N: ");
+                    string yesNo = Console.ReadLine();
+                    if (yesNo.ToLower() == "j")
                     {
-                        Console.WriteLine("Error");
+                        withDrawRunning = false;
                     }
-
-                    
+                    else if (yesNo.ToLower() == "n")
+                    {
+                        Console.WriteLine();
+                        continue;
+                    }
                 }
-                else if(yesNo.ToLower() == "n")
-                {
-                    Console.WriteLine("nej");
-                }
-                else
-                {
-                    Console.WriteLine("ok");
-                }
-
-                
             }
-            catch (Exception)
-            { Console.WriteLine("Fel! Försök igen."); }
 
         }
+
+        //Funktionen för att dölja PINkoden
 
         static SecureString hidePin()
         {
