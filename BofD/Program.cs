@@ -245,8 +245,7 @@ namespace BofD
                     Console.Write("Skicka till: ");
                     string toAccount = Console.ReadLine();
                     int to = int.Parse(toAccount);
-
-
+                    Console.WriteLine();
                     Console.WriteLine($"Du valde skicka från {accounts[from -1]} till {accounts[to -1]}.");
                     Console.WriteLine("Är detta korrekt?");
                     Console.Write("Mata in J eller N: ");
@@ -261,14 +260,12 @@ namespace BofD
                         if(transferAmount > balances[from -1])
                         {
                             Console.WriteLine();
-                            Console.WriteLine("Ojsan! Det gick inte att överföra.");
                             Console.WriteLine("Täckning saknas på kontot.");
                             Console.WriteLine();
                         }
-                        else if(transferAmount < 0) 
+                        else if(transferAmount <= 0) 
                         {
                             Console.WriteLine();
-                            Console.WriteLine("Ojsan! Det gick inte att överföra.");
                             Console.WriteLine("Beloppet var för lågt.");
                             Console.WriteLine();
                         }
@@ -340,7 +337,7 @@ namespace BofD
                     Console.Write("Ta ut från: ");
                     string chooseAccount = Console.ReadLine();
                     int chosenAccount = int.Parse(chooseAccount);
-                    
+                    Console.WriteLine();
                     Console.WriteLine($"Ta ut från {accounts[chosenAccount - 1]}.");
                     Console.WriteLine("Är detta korrekt?");
                     Console.Write("Mata in \"J\" eller \"N\": ");
@@ -367,15 +364,13 @@ namespace BofD
                                 if (withdrawAmount > balances[chosenAccount - 1])
                                 {
                                     Console.WriteLine();
-                                    Console.WriteLine("Ojsan! Det gick inte att överföra.");
                                     Console.WriteLine("Täckning saknas på kontot.");
                                     Console.WriteLine();
                                 }
-                                else if (withdrawAmount < 0)
+                                else if (withdrawAmount <= 0)
                                 {
                                     Console.WriteLine();
-                                    Console.WriteLine("Ojsan! Det gick inte att överföra.");
-                                    Console.WriteLine("Beloppet var för lågt!");
+                                    Console.WriteLine("Beloppet var för lågt.");
                                     Console.WriteLine();
                                 }
                                 else
