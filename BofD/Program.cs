@@ -77,7 +77,7 @@ namespace BofD
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine();
                 DateTime now = DateTime.Now;
-                Console.WriteLine($"Den {now.Day} {months[now.Month - 1]} {now.Year} {now:HH:mm:ss}");
+                Console.WriteLine($"Den {now.Day} {months[now.Month - 1]} {now.Year} {now:HH:mm}");
             }
 
             void loginSection()
