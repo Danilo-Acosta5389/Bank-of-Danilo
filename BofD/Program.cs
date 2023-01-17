@@ -9,10 +9,10 @@ namespace BofD
         {
             //Arryer som agerar databas
             //Jagged arrays har konton och saldon: totalt finns det 5 konton.
-            string[] userNames = new string[5];
-            int[] userPINs = new int[5];
-            string[][] userAccounts = new string[5][];
-            double[][] userBalances = new double[5][];
+            string[] userNames = new string[6];
+            int[] userPINs = new int[6];
+            string[][] userAccounts = new string[6][];
+            double[][] userBalances = new double[6][];
 
 
             userNames[0] = "Danilo";
@@ -44,6 +44,11 @@ namespace BofD
             userAccounts[4] = new string[] { "Personkonto", "Sparkonto", "Bobby"};
             userBalances[4] = new double[] { 32600, 250000, 1000000};
 
+            userNames[5] = "W";
+            userPINs[5] = 1;
+            userAccounts[5] = new string[] { "Personkonto", "Sparkonto" };
+            userBalances[5] = new double[] { 12, 89 };
+
             //Datum och tid finns av kosmetiska skäl
             string[] months = {"Januari", "Februari", "Mars", "April", "Maj",
             "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"};
@@ -69,7 +74,7 @@ namespace BofD
             void welcomeSign()
             {
                 Console.Clear();
-                Console.WriteLine("Bank of Danilo LTD banking application version 5.0.0.9, all rights reserved.");
+                Console.WriteLine("Bank of Danilo LTD banking application version 1.0, all rights reserved.");
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("\n::::::::::::::::::::::::::::::::::::::::::::::::::: Välkommen till :::::::::::::::::::::::::::::::::::::::::::::::::::::");
                 Console.WriteLine("\r\n /$$$$$$$                      /$$                        /$$$$$$        /$$$$$$$                      /$$ /$$          \r\n| $$__  $$                    | $$                       /$$__  $$      | $$__  $$                    |__/| $$          \r\n| $$  \\ $$  /$$$$$$  /$$$$$$$ | $$   /$$        /$$$$$$ | $$  \\__/      | $$  \\ $$  /$$$$$$  /$$$$$$$  /$$| $$  /$$$$$$ \r\n| $$$$$$$  |____  $$| $$__  $$| $$  /$$/       /$$__  $$| $$$$          | $$  | $$ |____  $$| $$__  $$| $$| $$ /$$__  $$\r\n| $$__  $$  /$$$$$$$| $$  \\ $$| $$$$$$/       | $$  \\ $$| $$_/          | $$  | $$  /$$$$$$$| $$  \\ $$| $$| $$| $$  \\ $$\r\n| $$  \\ $$ /$$__  $$| $$  | $$| $$_  $$       | $$  | $$| $$            | $$  | $$ /$$__  $$| $$  | $$| $$| $$| $$  | $$\r\n| $$$$$$$/|  $$$$$$$| $$  | $$| $$ \\  $$      |  $$$$$$/| $$            | $$$$$$$/|  $$$$$$$| $$  | $$| $$| $$|  $$$$$$/\r\n|_______/  \\_______/|__/  |__/|__/  \\__/       \\______/ |__/            |_______/  \\_______/|__/  |__/|__/|__/ \\______/ \r\n                                                                                                                        \r                                                                                                                        \r                                                                                                                        \r");
@@ -88,17 +93,19 @@ namespace BofD
                     welcomeSign();
                     if (logOut != true)
                     {
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.Red;
                         loginRetries--;
                         Console.WriteLine("Inloggning misslyckades, var god försök igen.");
                         Console.WriteLine($"Du har {loginRetries} försök kvar");
-                        //Thread.Sleep(2000);
-
+                        Console.ForegroundColor = ConsoleColor.White;
 
                         if (loginRetries == 0)
                         {
+                            Console.WriteLine();
                             Console.WriteLine("Antal försök tog slut, systemet stängs ned.");
-                            Thread.Sleep(1000);
-                            Console.WriteLine("Tack för att du använder Bank of Danilo, vi ser fram emot ditt nästa besök hos oss :).");
+                            Thread.Sleep(2000);
+                            Console.WriteLine("Tack för att du använder Bank of Danilo, vi ser fram emot ditt nästa besök hos oss.");
                             Thread.Sleep(2000);
                             Environment.Exit(0);
                         }
@@ -140,13 +147,21 @@ namespace BofD
                         }
                         catch (Exception)
                         {
-                            Console.WriteLine("Ojsan! Ett fel inträffade, var god försök igen.");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Ett fel inträffade, var god försök igen.");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine("Tryck enter för att fortsätta.");
+                            Console.ReadKey();
                         }
                         
                     }
                     else
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\nOgiltigt val. Var god och ange heltal endast!\n");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine("Tryck enter för att fortsätta.");
+                        Console.ReadKey();
                         logOut = true;
                     }
                 }
@@ -158,14 +173,15 @@ namespace BofD
         static void mainMenu(string userName, int pinCode, string[] accountNames, double[] accountBalances)
         {
             Console.Clear();
-            Console.WriteLine("Bank of Danilo LTD banking application version 5.0.0.9, all rights reserved.\n\n");
+            Console.WriteLine("Bank of Danilo LTD banking application version 1.0, all rights reserved.\n\n");
             Console.WriteLine("Inloggning lyckades!");
             Console.WriteLine($"\nVälkommen tillbaka {userName}!");
-            
+            Console.WriteLine();
             bool optionsRunning = true;
             while (optionsRunning)
             {
-                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.White;
+                //Console.WriteLine();
                 Console.WriteLine("Ange 1 för att se konton och saldon");
                 Console.WriteLine("Ange 2 för överföring mellan konton");
                 Console.WriteLine("Ange 3 för att ta ut pengar");
@@ -188,6 +204,7 @@ namespace BofD
                             }
                             Console.WriteLine("\nTryck enter för att komma till huvudmenyn");
                             Console.ReadKey();
+                            Console.WriteLine();
                             break;
                         case 2://Här kallas en funktion för överföring mellan konton, de jagged arrays som redan har tagits in, tas in igen.
                             Console.WriteLine("\nÖverföring mellan konton\n");
@@ -199,21 +216,26 @@ namespace BofD
                             //Thread.Sleep(2000);
                             break;
                         case 4: //Logga ut stoppar helt enkelt while loopen för att menyn ska loopa klart.
-                            Console.WriteLine("\nLogga ut");
-                            //Thread.Sleep(1000);
+                            Console.Clear();
+                            Console.WriteLine("\nLoggar ut\n");
+                            Thread.Sleep(2000);
                             Console.WriteLine("Tack för att du använder Bank of Danilo!");
-                            //Thread.Sleep(1000);
-                            Console.WriteLine("Vi ser fram emot ditt nästa besök hos oss :)");
-                            //Thread.Sleep(2000);
+                            Thread.Sleep(2000);
+                            Console.WriteLine("\nVi ser fram emot ditt nästa besök hos oss.");
+                            Thread.Sleep(1000);
+                            Console.WriteLine("\n\n\n\n\nOBS: Bank of Danilo ansvarar inte för plötsliga kapitalförluster, dataläckor eller andra incidenter som kan påverkar kundens ekonomi eller integritet...");
+                            Thread.Sleep(2000);
                             optionsRunning = false;
                             break;
                         default:
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("\nOgiltigt val. Var god och ange siffran 1, 2, 3 eller 4.\n");
                             break;
                     }
                 }
                 else //Felhantering finns i olika former, TryParse och TryCatche eller i switchsatsen
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\nOgiltigt val. Var god och ange siffran 1, 2, 3 eller 4.\n");
                 }
             }
@@ -226,6 +248,7 @@ namespace BofD
             bool transferMenu = true;
             while (transferMenu)
             {
+                Console.ForegroundColor = ConsoleColor.White;
                 try
                 {   //Itererar mellan inhämtade konton och saldon
                     for (int i = 0; i < accounts.Length; i++)
@@ -237,9 +260,10 @@ namespace BofD
                     }
 
                     //Instruktioner för användaren
-                    
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("\nOBS! Välj ett konto genom att mata in siffran till vänster om kontonamnet.");
                     Console.WriteLine("-- Eller lämna blankt och tryck enter för att avbryta.\n");
+                    Console.ForegroundColor = ConsoleColor.White;
                     Console.Write("Skicka från: ");
                     string fromAccount = Console.ReadLine();
                     int from = int.Parse(fromAccount);
@@ -261,12 +285,15 @@ namespace BofD
                         
                         if(transferAmount > balances[from -1])
                         {
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine();
                             Console.WriteLine("Täckning saknas på kontot.");
                             Console.WriteLine();
+
                         }
                         else if(transferAmount <= 0) 
                         {
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine();
                             Console.WriteLine("Beloppet var för lågt.");
                             Console.WriteLine();
@@ -293,7 +320,7 @@ namespace BofD
                     }
                     else
                     {
-                        
+                        Console.WriteLine();
                         Console.WriteLine("Var god och mata in \"J\" eller \"N\"" );
                         Console.WriteLine();
                         continue;
@@ -301,7 +328,10 @@ namespace BofD
                 }
                 catch (Exception)
                 {
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Ogiltigt val.");
+                    Console.ForegroundColor = ConsoleColor.White;
                     Console.Write("Tillbaka till huvudmenyn? J/N: ");
                     string yesNo = Console.ReadLine();
                     if (yesNo.ToLower() == "j")
@@ -313,7 +343,7 @@ namespace BofD
                         Console.WriteLine();
                         continue;
                     }
-                    
+                    Console.WriteLine();
                 }
             }
         }
@@ -322,17 +352,21 @@ namespace BofD
         //Tar in pinkoden från inloggningen, konton och saldon
         static void withdrawMoney(int pinCode, string[] accounts, double[] balances)
         {
+            int pinRetries = 3;
             bool withDrawRunning = true;
             while(withDrawRunning)
             {
+                Console.ForegroundColor = ConsoleColor.White;
                 try
                 {
                     for (int i = 0; i < accounts.Length; i++)
                     {
                         Console.WriteLine($"{i + 1}. {accounts[i]}: {balances[i]} kr");
                     }
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("\nOBS! Välj ett konto genom att mata in siffran till vänster om kontonamnet.");
-                    Console.WriteLine("-- Eller lämna blankt och tryck enter för att avbryta.\n"); 
+                    Console.WriteLine("-- Eller lämna blankt och tryck enter för att avbryta.\n");
+                    Console.ForegroundColor = ConsoleColor.White;
 
                     //Lite workaround för den som vill kunna avbryta mitt i
 
@@ -344,12 +378,11 @@ namespace BofD
                     Console.WriteLine("Är detta korrekt?");
                     Console.Write("Mata in \"J\" eller \"N\": ");
                     string yesNo = Console.ReadLine();
-
                     if (yesNo.ToLower() == "j")
                     {
                         //Användare måste ange PIN för att göra uttag, annars går det inte
                         //PINkoden använder samma metod som vid inloggingen.
-
+                        Console.WriteLine();
                         Console.WriteLine("OBS! Ange PIN-kod för att fortsätta uttag");
                         Console.Write("--> ");
                         SecureString pin = hidePin();
@@ -380,19 +413,36 @@ namespace BofD
                                     Console.WriteLine();
                                     balances[chosenAccount - 1] = balances[chosenAccount - 1] - withdrawAmount;
                                     Console.WriteLine("Uttag lyckades!");
-                                    Console.WriteLine($"\nTog ut {Math.Round(withdrawAmount, 2)} kr från {accounts[chosenAccount - 1]}.");
-                                    Console.WriteLine($"Det finns {Math.Round(balances[chosenAccount - 1], 2)} kr kvar på kontot");
+                                    Console.WriteLine($"\nTog ut {Math.Round(withdrawAmount, 2)} kr från {accounts[chosenAccount - 1]}");
+                                    Console.WriteLine($"Det finns {Math.Round(balances[chosenAccount - 1], 2)} kr kvar på kontot.");
                                     Console.WriteLine();
                                     Console.WriteLine("Tryck enter för att komma till huvudmenyn");
                                     Console.ReadKey();
                                     withDrawRunning = false;
                                 }
                             }
-                            else if (inputPIN != pinCode) { Console.WriteLine(); Console.WriteLine("Ogiltig PIN"); }
+                            else if (inputPIN != pinCode) //Någon form av konsekvens för att mata in fel pin har implementerats
+                            {
+                                pinRetries--;
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine(); Console.WriteLine($"Ogiltig PIN. Du har {pinRetries} försök kvar.");
+                                Console.WriteLine();
+                                if(pinRetries == 0)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    Console.WriteLine("Antal försök tog slut, systemet stängs ned.");
+                                    Thread.Sleep(2000);
+                                    Console.WriteLine("Tack för att du använder Bank of Danilo, vi ser fram emot ditt nästa besök hos oss.");
+                                    Thread.Sleep(2000);
+                                    Environment.Exit(0);
+                                }
+                            }
 
                         }
                         else 
-                        { 
+                        {
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Ett fel inträffade, var god försök igen.");
                             Console.WriteLine();
                         }
@@ -402,6 +452,7 @@ namespace BofD
                     {
                         Console.Write("Tillbaka till huvudmenyn? J/N: ");
                         yesNo = Console.ReadLine();
+                        Console.WriteLine();
                         if (yesNo.ToLower() == "j")
                         {
                             withDrawRunning = false;
@@ -416,6 +467,7 @@ namespace BofD
                     {
                         Console.Write("Tillbaka till huvudmenyn? J/N: ");
                         yesNo = Console.ReadLine();
+                        Console.WriteLine();
                         if (yesNo.ToLower() == "j")
                         {
                             withDrawRunning = false;
@@ -432,7 +484,10 @@ namespace BofD
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Ogiltigt val.");
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Ogiltigt val");
+                    Console.ForegroundColor = ConsoleColor.White;
                     Console.Write("Tillbaka till huvudmenyn? J/N: ");
                     string yesNo = Console.ReadLine();
                     if (yesNo.ToLower() == "j")
@@ -444,6 +499,7 @@ namespace BofD
                         Console.WriteLine();
                         continue;
                     }
+                    Console.WriteLine();
                 }
             }
 
