@@ -107,6 +107,8 @@ namespace BofD
                             Thread.Sleep(2000);
                             Console.WriteLine("Tack för att du använder Bank of Danilo, vi ser fram emot ditt nästa besök hos oss.");
                             Thread.Sleep(2000);
+                            Console.WriteLine("\n\n\n\n\nOBS: Bank of Danilo ansvarar inte för plötsliga kapitalförluster, dataläckor eller andra incidenter som kan påverkar kundens ekonomi eller integritet...");
+                            Thread.Sleep(2000);
                             Environment.Exit(0);
                         }
                     }
@@ -137,9 +139,11 @@ namespace BofD
                                 if (inputName.ToLower() == userNames[i].ToLower() && inputPIN == userPINs[i])
                                 {
                                     //När det finns en matchning skickas allt som finns på rätt index in i denna funktion
+
                                     mainMenu(userNames[i], userPINs[i], userAccounts[i], userBalances[i]);
                                     logOut = true;
-                                    loginRetries = 3; 
+                                    loginRetries = 3;
+                                    
                                     //Här vet systemet att det är en giltig inloggning
                                     //och antal försök ställs om till 3
                                 }
@@ -434,6 +438,8 @@ namespace BofD
                                     Thread.Sleep(2000);
                                     Console.WriteLine("Tack för att du använder Bank of Danilo, vi ser fram emot ditt nästa besök hos oss.");
                                     Thread.Sleep(2000);
+                                    Console.WriteLine("\n\n\n\n\nOBS: Bank of Danilo ansvarar inte för plötsliga kapitalförluster, dataläckor eller andra incidenter som kan påverkar kundens ekonomi eller integritet...");
+                                    Thread.Sleep(2000);
                                     Environment.Exit(0);
                                 }
                             }
@@ -502,7 +508,6 @@ namespace BofD
                     Console.WriteLine();
                 }
             }
-
         }
 
         //Funktionen för att dölja PINkoden
