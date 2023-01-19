@@ -222,9 +222,9 @@ namespace BofD
                         case 4: //Logga ut stoppar helt enkelt while loopen för att menyn ska loopa klart.
                             Console.Clear();
                             Console.WriteLine("\nLoggar ut\n");
-                            Thread.Sleep(2000);
+                            Thread.Sleep(1000);
                             Console.WriteLine("Tack för att du använder Bank of Danilo!");
-                            Thread.Sleep(2000);
+                            Thread.Sleep(1000);
                             Console.WriteLine("\nVi ser fram emot ditt nästa besök hos oss.");
                             Thread.Sleep(1000);
                             Console.WriteLine("\n\n\n\n\nOBS: Bank of Danilo ansvarar inte för plötsliga kapitalförluster, dataläckor eller andra incidenter som kan påverkar kundens ekonomi eller integritet...");
