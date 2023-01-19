@@ -435,9 +435,9 @@ namespace BofD
                                 {
                                     Console.ForegroundColor = ConsoleColor.White;
                                     Console.WriteLine("Antal försök tog slut, systemet stängs ned.");
-                                    Thread.Sleep(2000);
+                                    Thread.Sleep(1000);
                                     Console.WriteLine("Tack för att du använder Bank of Danilo, vi ser fram emot ditt nästa besök hos oss.");
-                                    Thread.Sleep(2000);
+                                    Thread.Sleep(1000);
                                     Console.WriteLine("\n\n\n\n\nOBS: Bank of Danilo ansvarar inte för plötsliga kapitalförluster, dataläckor eller andra incidenter som kan påverkar kundens ekonomi eller integritet...");
                                     Thread.Sleep(2000);
                                     Environment.Exit(0);
