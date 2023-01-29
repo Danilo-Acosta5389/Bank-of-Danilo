@@ -155,7 +155,7 @@ namespace BofD
                             Console.WriteLine("Ett fel inträffade, var god försök igen.");
                             Console.ForegroundColor = ConsoleColor.White;
                             Console.WriteLine("Tryck enter för att fortsätta.");
-                            Console.ReadKey();
+                            while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
                         }
                         
                     }
@@ -165,7 +165,7 @@ namespace BofD
                         Console.WriteLine("\nOgiltigt val. Var god och ange heltal endast!\n");
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine("Tryck enter för att fortsätta.");
-                        Console.ReadKey();
+                        while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
                         logOut = true;
                     }
                 }
@@ -207,7 +207,7 @@ namespace BofD
                                 Console.WriteLine($"{accountNames[i]}: {Math.Round(accountBalances[i], 2)} kr");
                             }
                             Console.WriteLine("\nTryck enter för att komma till huvudmenyn");
-                            Console.ReadKey();
+                            while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
                             Console.WriteLine();
                             break;
                         case 2://Här kallas en funktion för överföring mellan konton, de jagged arrays som redan har tagits in, tas in igen.
@@ -313,7 +313,7 @@ namespace BofD
                             Console.WriteLine($"och totalt: {Math.Round(balances[from - 1], 2)} kr på {accounts[from - 1]}.");
                             Console.WriteLine();
                             Console.WriteLine("Tryck enter för att komma till huvudmenyn");
-                            Console.ReadKey();
+                            while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
                             transferMenu = false;
                         }
                     }
@@ -421,7 +421,7 @@ namespace BofD
                                     Console.WriteLine($"Det finns {Math.Round(balances[chosenAccount - 1], 2)} kr kvar på kontot.");
                                     Console.WriteLine();
                                     Console.WriteLine("Tryck enter för att komma till huvudmenyn");
-                                    Console.ReadKey();
+                                    while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
                                     withDrawRunning = false;
                                 }
                             }
